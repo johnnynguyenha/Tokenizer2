@@ -18,20 +18,20 @@ def clean(input_file, output_file):
     for line in lines:
         # if inside block comment, keep going until we reach end
         if block_comment:
-            if '"""' in line:  # End of block comment
-                comment, code = line.split('"""', 1)  # Split after the closing """
-                comments.append(comment.strip())  # Capture the remaining part of the block comment
-                block_comment = False  # End the block comment mode
+            if '"""' in line:  # end of block comment
+                comment, code = line.split('"""', 1)  # split after the closing """
+                comments.append(comment.strip())  # capture inside of block comment
+                block_comment = False  # disable flag
             else:
-                comments.append(line.strip())  # Continue capturing the block comment lines
-            continue  # Skip further processing of this line
+                comments.append(line.strip())  # continue capturing the block comment lines
+            continue  
 
         # find start of block comment
         if '"""' in line:
             code, comment = line.split('"""', 1)
-            comments.append(comment.strip())  # Capture the start of the block comment
-            block_comment = True  # Enable block comment mode
-            continue  # Skip processing this line since it's part of a comment
+            comments.append(comment.strip())  # get start of block comment
+            block_comment = True  # enable flag
+            continue 
 
         # remove comments after #
         if '#' in line:
@@ -113,22 +113,22 @@ def operators(input_file):
     # operators list to store found operators
     operator_array = []
     # operators dictionary to hold operators
-    operator_dictionary = {"+", "-", "=", "++", "--", "==", "<", ">", "<<", ">>"}
+    operator_dictionary = ["++", "--", "==", "+", "-", "=", "<", ">", "<<", ">>"]
 
-    # open file, read every line
+    # open file go through every line
     with open(input_file, 'r') as file:
         lines = file.readlines()
 
     # iterate through each line
-    for line_number, line in enumerate(lines, start=1):
-        # check for multi-character operators first
+    for line in lines:
+        original_line = line  # keep original line
         for op in operator_dictionary:
-            if op in line:  # check if the op is in the line
-                # count how many ops
-                operator_array.extend([op] * line.count(op))  # add to operator array the amount of times it occurs
-                line = line.replace(op, '')  # remove operator from line so we don't count twice
+            # count all occurances of an operator in a line
+            while op in line:
+                operator_array.append(op)  # add operator to operator array
+                line = line.replace(op, '', 1)  # remove the operator once it is counted
 
-    # return list of operators found
+    # Return list of operators found
     return operator_array
 
 
@@ -169,10 +169,10 @@ def literals(input_file):
     # dictionary of literals as a set
     literal_dictionary = {"5", "3", "1", "2", "4", "6", "7", "8", "9", "10", "20"}
 
-    # Regular expression to find literals enclosed in double quotes
+    # regular expression, finds literals in double quotes
     literal_pattern = r'\"(.*?)\"'
 
-    # Open file and read every line
+    # open file, read lines
     with open(input_file, 'r') as file:
         lines = file.readlines()
 
@@ -220,6 +220,7 @@ def makeTable(input_file, output_file):
     # tally the total tokens (comments not included in token count)
     total = len(keyword) + len(operator) + len(literal) + len(separator) + len(identifier)
 
+    #print clean code
     print("Clean Code:")
     with open(output_file, 'r') as file:
         lines = file.readlines()
@@ -234,14 +235,19 @@ def makeTable(input_file, output_file):
     # print each category if the set has an element
     if keyword_set:
         print(f"Keywords:      | {keyword_set}")
+        print(len(keyword))
     if identifier_set:
         print(f"Identifiers:   | {identifier_set}")
+        print(len(identifier))
     if literal_set:
         print(f"Literals:      | {literal_set}")
+        print(len(literal))
     if operator_set:
         print(f"Operators:     | {operator_set}")
+        print(len(operator))
     if separator_set:
         print(f"Separators:    | {separator_set}")
+        print(len(separator))
     if comment:
         print(f"Comments:      | {comment}")
     

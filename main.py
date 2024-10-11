@@ -88,7 +88,7 @@ def indentifiers(input_file):
     # identifier list for found identifiers
     identifier_array = []
     # identifier dictionary to store identifiers
-    identifier_dictionary = {"add", "result", "a", "b", "greet", "count", "i",}
+    identifier_dictionary = {"add", "result", "a", "b", "greet", "count", "i", "calculate_sum", "__name__", "num1", "num2"}
 
     # open file, read every line
     with open(input_file, 'r') as file:
@@ -121,13 +121,16 @@ def operators(input_file):
 
     # iterate through each line
     for line_number, line in enumerate(lines, start=1):
-        # check every character in the line if it's in the operator dictionary
-        for char in line:
-            if char in operator_dictionary:
-                operator_array.append(char)
-    
+        # check for multi-character operators first
+        for op in operator_dictionary:
+            if op in line:  # check if the op is in the line
+                # count how many ops
+                operator_array.extend([op] * line.count(op))  # add to operator array the amount of times it occurs
+                line = line.replace(op, '')  # remove operator from line so we don't count twice
+
     # return list of operators found
     return operator_array
+
 
 
 # function that looks for separators in the separators dictionary, add it to a list
@@ -163,8 +166,8 @@ def separators(input_file):
 def literals(input_file):
     # list of literals found
     literal_array = []
-    # dictionary of literals
-    literal_dictionary = {"5", "3", "1", "2", "4,", "5", "6", "7", "8", "9"}
+    # dictionary of literals as a set
+    literal_dictionary = {"5", "3", "1", "2", "4", "6", "7", "8", "9", "10", "20"}
 
     # Regular expression to find literals enclosed in double quotes
     literal_pattern = r'\"(.*?)\"'
@@ -175,15 +178,16 @@ def literals(input_file):
 
     # iterate through every line
     for line_number, line in enumerate(lines, start=1):
-        # check if literal is in dictionary
+        # check if literal is in dictionary using word boundaries
         for literal in literal_dictionary:
-            if literal in line:
+            pattern = rf'\b{literal}\b'  # ensures that each literal is a full word
+            if re.search(pattern, line):
                 literal_array.append(literal)
 
-        # find all literals in quotes and add them
+        # add all literals in quotes
         literals_found = re.findall(literal_pattern, line)
         literal_array.extend(literals_found)
-    
+
     # return list of literals
     return literal_array
 
@@ -257,3 +261,7 @@ makeTable(test2, output2)
 test3 = 'test3.txt'
 output3 = 'output3.txt'
 makeTable(test3, output3)
+
+test4 = 'test4.txt'
+output4 = 'output4.txt'
+makeTable(test4, output4)

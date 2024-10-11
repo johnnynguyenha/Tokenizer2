@@ -82,7 +82,6 @@ def keywords(input_file):
     # return list of keywords found
     return keyword_array
                 
-
 # function that looks for identifiers in the identifier dictionary, add it to a list
 def indentifiers(input_file):
     # identifier list for found identifiers
@@ -107,7 +106,6 @@ def indentifiers(input_file):
     # return list of identifiers found
     return identifier_array
 
-
 # function that looks for operators in the operators dictionary, add it to a list
 def operators(input_file):
     # operators list to store found operators
@@ -130,8 +128,6 @@ def operators(input_file):
 
     # Return list of operators found
     return operator_array
-
-
 
 # function that looks for separators in the separators dictionary, add it to a list
 def separators(input_file):
@@ -167,7 +163,7 @@ def literals(input_file):
     # list of literals found
     literal_array = []
     # dictionary of literals as a set
-    literal_dictionary = {"5", "3", "1", "2", "4", "6", "7", "8", "9", "10", "20"}
+    literal_dictionary = {"5", "3", "1", "2", "4", "6", "7", "8", "9", "10", "20", "0"}
 
     # regular expression, finds literals in double quotes
     literal_pattern = r'\"(.*?)\"'

@@ -216,8 +216,15 @@ def makeTable(input_file, output_file):
     # tally the total tokens (comments not included in token count)
     total = len(keyword) + len(operator) + len(literal) + len(separator) + len(identifier)
 
+    print("Clean Code:")
+    with open(output_file, 'r') as file:
+        lines = file.readlines()
+    
+    for line in lines:
+        print(line, end='')
+    
     # print table header
-    print("Category       |     Tokens")
+    print("\nCategory       |     Tokens")
     print("---------------|---------------------------------------------")
     
     # print each category if the set has an element
